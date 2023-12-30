@@ -30,9 +30,12 @@ struct rekam_medis{
 	struct waktu wkt;
 };
 typedef struct rekam_medis remed;
-
-
+ 
 remed data[50];
+
+void tambah();
+void tampil();
+void welcomescreen();
 
 int size=0,x;
 void tambah(char kode[12],char nama[50],char pekerjaan[50], char nohp[50], char umur[4], char pj[50], char diagnosa[400], char anamnesis[500], char proseduroperasi[500], char postoperasi[500], char medicalcheckup[500]){
@@ -67,16 +70,30 @@ void tampil(){
 			printf("Umur \t\t\t: %s\n",data[i].dp.umur);
 			printf("Penanggung Jawab \t: %s\n",data[i].dp.pj);
 			printf("Diagnosa \t\t: %s\n",data[i].dp.diagnosa);
-			printf("--ANAMNESIS--\n%s\n",data[i].anamnesis);	
-			printf("--PROSEDUR OPERASI--\n%s\n",data[i].proseduroperasi);	
-			printf("--POST OPERASI--\n%s\n",data[i].postoperasi);	
-			printf("--MEDICAL CHECK-UP--\n%s\n",data[i].medicalcheckup);	
+			printf("Anamnesis \t\t: %s\n",data[i].anamnesis);	
+			printf("Prosedur Operasi \t: %s\n",data[i].proseduroperasi);	
+			printf("Post Operasi \t\t: %s\n",data[i].postoperasi);	
+			printf("Medical Check Up \t: %s\n",data[i].medicalcheckup);	
 			printf("Waktu Input \t\t: %i/%i/%i\n\n", data[i].wkt.tanggal, data[i].wkt.bulan, data[i].wkt.tahun);
 			}
 		}
 	}
 }
-int main() {
+
+void welcomescreen()
+{
+    printf("\n\n\n\n\n\n\n#########################################################");
+    printf("\n\t#\t\t Welcome To\t\t#");
+    printf("\n\t#   RS KOTAKITA Rekam Medis System      #");
+    printf("\n#########################################################");
+    printf("\n\n\n Tekan apapun untuk lanjut.......\n");
+    getch();  // Use to hold the screen
+    system("cls"); // use to clear screen
+}
+
+int main(){
+
+	welcomescreen();
 	size = sizeof(remed)/sizeof(data[0]);
 	int i=1;
 	int pilih=0,pilih_edit;
