@@ -21,12 +21,21 @@ struct waktu
 };
 typedef struct waktu wkt;
 
+struct biaya
+{
+	int obat;
+	int operasi;
+	int total;
+};
+typedef struct biaya bea;
+
 struct rekam_medis{
 	struct data_pasien dp;
 	char anamnesis[500];
 	char proseduroperasi[500];
 	char postoperasi[500];
 	char medicalcheckup[500];
+	struct biaya bea;
 	struct waktu wkt;
 };
 typedef struct rekam_medis remed;
@@ -36,6 +45,12 @@ remed data[50];
 void tambah();
 void tampil();
 void welcomescreen();
+void swap(int *A, int *B);
+void sorting_tanggal();
+void sorting_nama();
+void searchByTanggal();
+void searchByNama();
+int total(int x, int y);
 
 int size=0,x;
 void tambah(char kode[12],char nama[50],char pekerjaan[50], char nohp[50], char umur[4], char pj[50], char diagnosa[400], char anamnesis[500], char proseduroperasi[500], char postoperasi[500], char medicalcheckup[500]){
@@ -50,6 +65,10 @@ void tambah(char kode[12],char nama[50],char pekerjaan[50], char nohp[50], char 
 	strcpy(data[size].proseduroperasi,proseduroperasi);
 	strcpy(data[size].postoperasi,postoperasi);
 	strcpy(data[size].medicalcheckup,medicalcheckup);
+	printf("Harga Obat : ");
+	scanf("%i", &data[size].bea.obat);
+	printf("Biaya Operasi : ");
+	scanf("%i", &data[size].bea.operasi);
 	printf("Waktu Input : ");
 	scanf("%i %i %i", &data[size].wkt.tanggal, &data[size].wkt.bulan, &data[size].wkt.tahun);
 	size++;
@@ -58,10 +77,9 @@ void tambah(char kode[12],char nama[50],char pekerjaan[50], char nohp[50], char 
 void tampil(){
 	int i;
 	if(size>0){
-		for(i=1;i<size;i++){
+		for(i=0;i<size;i++){
 			x=strlen(data[i].dp.kode); //panjang dari string 
 			if(x>=1){
-			printf("--REKAM MEDIS--");
 			printf("\nIdentitas Pasien ke - [%d]\n",i);
 			printf("Kode \t\t\t: %s\n",data[i].dp.kode);	
 			printf("Nama \t\t\t: %s\n",data[i].dp.nama);
@@ -74,6 +92,10 @@ void tampil(){
 			printf("Prosedur Operasi \t: %s\n",data[i].proseduroperasi);	
 			printf("Post Operasi \t\t: %s\n",data[i].postoperasi);	
 			printf("Medical Check Up \t: %s\n",data[i].medicalcheckup);	
+			printf("Harga Obat \t\t: %i\n",data[i].bea.obat);	
+			printf("Biaya Operasi \t\t: %i\n",data[i].bea.operasi);	
+			data[i].bea.total = total(data[i].bea.obat,data[i].bea.operasi);
+			printf("Total Biaya \t\t: %i\n",data[i].bea.total);	
 			printf("Waktu Input \t\t: %i/%i/%i\n\n", data[i].wkt.tanggal, data[i].wkt.bulan, data[i].wkt.tahun);
 			}
 		}
@@ -87,8 +109,139 @@ void welcomescreen()
     printf("\n\t#   RS KOTAKITA Rekam Medis System      #");
     printf("\n#########################################################");
     printf("\n\n\n Tekan apapun untuk lanjut.......\n");
-    getch();  // Use to hold the screen
-    system("cls"); // use to clear screen
+    getch();  
+    system("cls"); 
+}
+
+void swap(int *A, int *B) 
+{ 
+	int tmp = *A; 
+	*A = *B; 
+	*B = tmp; 
+} 
+
+void sorting_tanggal(){
+	int pilih_sorting_tanggal;
+    printf("Urutan:\n1. Ascending\n2. Descending\nPilih urutan: ");
+    scanf("%i", &pilih_sorting_tanggal);
+	int i, j;
+    for (i = 0; i < size - 1; i++) {
+        for (j = 0; j < size - i - 1; j++) {
+            if (pilih_sorting_tanggal == 1) { // ascending
+                if (data[j].wkt.tahun > data[j+1].wkt.tahun) {
+                    swap(&data[j], &data[j+1]);
+                } else if (data[j].wkt.tahun == data[j + 1].wkt.tahun && data[j].wkt.bulan > data[j + 1].wkt.bulan) {
+                    swap(&data[j], &data[j+1]);
+                } else if (data[j].wkt.tahun == data[j + 1].wkt.tahun && data[j].wkt.bulan == data[j + 1].wkt.bulan && data[j].wkt.tanggal > data[j + 1].wkt.tanggal) {
+                    swap(&data[j], &data[j+1]);
+                }
+            } else if (pilih_sorting_tanggal == 2) { // descending
+                if (data[j].wkt.tahun < data[j+1].wkt.tahun) {
+                    swap(&data[j], &data[j+1]);
+                } else if (data[j].wkt.tahun == data[j + 1].wkt.tahun && data[j].wkt.bulan < data[j + 1].wkt.bulan) {
+                    swap(&data[j], &data[j+1]);
+                } else if (data[j].wkt.tahun == data[j + 1].wkt.tahun && data[j].wkt.bulan == data[j + 1].wkt.bulan && data[j].wkt.tanggal < data[j + 1].wkt.tanggal) {
+                    swap(&data[j], &data[j+1]);
+                }
+            }
+        }
+    }
+	printf("Data setelah diurutkan berdasarkan Tanggal:\n");
+    tampil();
+}
+
+void sorting_nama(){
+	int pilih_sorting_nama;
+    printf("Urutan:\n1. Ascending\n2. Descending\nPilih urutan: ");
+    scanf("%i", &pilih_sorting_nama);
+	int i, j;
+    for (i = 0; i < size - 1; i++) {
+        for (j = 0; j < size - i - 1; j++) {
+            if (pilih_sorting_nama == 1) { // ascending
+                if (strcmp(data[j].dp.nama, data[j+1].dp.nama) > 0) {
+                    swap(&data[j], &data[j+1]);
+                }
+            } else if (pilih_sorting_nama == 2) { // descending
+                if (strcmp(data[j].dp.nama, data[j+1].dp.nama) < 0) {
+                    swap(&data[j], &data[j+1]);
+                }
+            }
+        }
+    }
+	printf("Data setelah diurutkan berdasarkan Tanggal:\n");
+    tampil();
+}
+
+void searchByTanggal() {
+	int tanggal, bulan, tahun;
+    printf("Masukkan tanggal, bulan, tahun untuk pencarian: ");
+    scanf("%d %d %d", &tanggal, &bulan, &tahun);
+    int found = 0;
+    for (int i = 0; i < size; i++) {
+        if (data[i].wkt.tanggal == tanggal && data[i].wkt.bulan == bulan && data[i].wkt.tahun == tahun) {
+            found = 1;
+            printf("Data ditemukan pada indeks %d\n", i);
+            printf("Kode: %s\n", data[i].dp.kode);
+            printf("Nama: %s\n", data[i].dp.nama);
+            printf("Pekerjaan \t\t: %s\n",data[i].dp.pekerjaan);
+			printf("No HP \t\t\t: %s\n",data[i].dp.nohp);
+			printf("Umur \t\t\t: %s\n",data[i].dp.umur);
+			printf("Penanggung Jawab \t: %s\n",data[i].dp.pj);
+			printf("Diagnosa \t\t: %s\n",data[i].dp.diagnosa);
+			printf("Anamnesis \t\t: %s\n",data[i].anamnesis);	
+			printf("Prosedur Operasi \t: %s\n",data[i].proseduroperasi);	
+			printf("Post Operasi \t\t: %s\n",data[i].postoperasi);	
+			printf("Medical Check Up \t: %s\n",data[i].medicalcheckup);	
+			printf("Harga Obat \t\t: %i\n",data[i].bea.obat);	
+			printf("Biaya Operasi \t\t: %i\n",data[i].bea.operasi);	
+			data[i].bea.total = total(data[i].bea.obat,data[i].bea.operasi);
+			printf("Total Biaya \t\t: %i\n",data[i].bea.total);	
+			printf("Waktu Input \t\t: %i/%i/%i\n\n", data[i].wkt.tanggal, data[i].wkt.bulan, data[i].wkt.tahun);
+            break;
+        }
+    }
+    if (!found) {
+        printf("Data tidak ditemukan untuk tanggal %d/%d/%d\n", tanggal, bulan, tahun);
+    }
+}
+
+void searchByNama() {
+	char namaCari[50];
+    printf("Masukkan nama untuk pencarian: ");
+    scanf("%s", namaCari);
+    int found = 0;
+    for (int i = 0; i < size; i++) {
+        if (strcmp(data[i].dp.nama, namaCari) == 0) {
+            found = 1;
+            printf("Data ditemukan pada indeks %d\n", i);
+            printf("Kode: %s\n", data[i].dp.kode);
+            printf("Nama: %s\n", data[i].dp.nama);
+            printf("Pekerjaan \t\t: %s\n",data[i].dp.pekerjaan);
+			printf("No HP \t\t\t: %s\n",data[i].dp.nohp);
+			printf("Umur \t\t\t: %s\n",data[i].dp.umur);
+			printf("Penanggung Jawab \t: %s\n",data[i].dp.pj);
+			printf("Diagnosa \t\t: %s\n",data[i].dp.diagnosa);
+			printf("Anamnesis \t\t: %s\n",data[i].anamnesis);	
+			printf("Prosedur Operasi \t: %s\n",data[i].proseduroperasi);	
+			printf("Post Operasi \t\t: %s\n",data[i].postoperasi);	
+			printf("Medical Check Up \t: %s\n",data[i].medicalcheckup);	
+			printf("Harga Obat \t\t: %i\n",data[i].bea.obat);	
+			printf("Biaya Operasi \t\t: %i\n",data[i].bea.operasi);	
+			data[i].bea.total = total(data[i].bea.obat,data[i].bea.operasi);
+			printf("Total Biaya \t\t: %i\n",data[i].bea.total);	
+			printf("Waktu Input \t\t: %i/%i/%i\n\n", data[i].wkt.tanggal, data[i].wkt.bulan, data[i].wkt.tahun);
+            break;
+        }
+    }
+    if (!found) {
+        printf("Data tidak ditemukan untuk nama %s\n", namaCari);
+    }
+}
+
+int total(int x, int y){
+	int z;
+	z = x + y;
+	return z;
 }
 
 int main(){
@@ -101,7 +254,7 @@ int main(){
 	char anamnesis[500],proseduroperasi[500],postoperasi[500],medicalcheckup[500];
 	awal:
 	printf("====== Data Pasien ======\n");
-	printf("Menu :\n1. Tampil Data\n2. Tambah Data\n3. Update Data\n4. Hapus Data\n5. Keluar\nPilih menu : ");
+	printf("Menu :\n1. Tampil Data\n2. Tambah Data\n3. Update Data\n4. Hapus Data\n5. Pengurutan Data\n6. Mencari Data\n7. Keluar\nPilih menu : ");
 	scanf("%d",&pilih);
 	if(pilih==1){
 		printf("List Data Pasien: \n\n");
@@ -162,8 +315,10 @@ int main(){
 			printf("Prosedur Operasi \t: %s\n",data[no].proseduroperasi);	
 			printf("Post Operasi \t\t: %s\n",data[no].postoperasi);	
 			printf("Medical Check Up \t: %s\n",data[no].medicalcheckup);
+			printf("Harga Obat \t\t: %i\n",data[i].bea.obat);	
+			printf("Biaya Operasi \t\t: %i\n",data[i].bea.operasi);	
 			printf("Waktu Input \t\t: %i/%i/%i\n\n", data[i].wkt.tanggal, data[i].wkt.bulan, data[i].wkt.tahun);
-			printf("\nPilih data yang ingin diedit sesuai nomor (1.Kode;2.Nama;3.Pekerjaan;4.No Hp;5.Umur;6.Penanggung Jawab;7.Diagnosa;8.Anamnesis;9.Prosedur Operasi;10.Post Operasi;11.Medical Check Up;12.Waktu Input) = ");
+			printf("\nPilih data yang ingin diedit sesuai nomor (1.Kode;2.Nama;3.Pekerjaan;4.No Hp;5.Umur;6.Penanggung Jawab;7.Diagnosa;8.Anamnesis;9.Prosedur Operasi;10.Post Operasi;11.Medical Check Up;12.Harga Obat;13.Biaya Operasi;14.Waktu Input) = ");
 			scanf("%d",&pilih_edit); 
 			switch (pilih_edit){
 			case 1:
@@ -211,6 +366,14 @@ int main(){
 				scanf(" %[^\n]%*c",data[no].medicalcheckup);
 				break;
 			case 12:
+				printf("Harga Obat :");
+				scanf("%i", &data[no].bea.obat);
+				break;
+			case 13:
+				printf("Biaya Operasi :");
+				scanf("%i", &data[no].bea.operasi);
+				break;
+			case 14:
 				printf("\nWaktu Input :");
 				scanf("%i %i %i", &data[no].wkt.tanggal, &data[no].wkt.bulan, &data[no].wkt.tahun);
 				break;
@@ -245,6 +408,9 @@ int main(){
 			strcpy(data[no].proseduroperasi,data[no+1].proseduroperasi);
 			strcpy(data[no].postoperasi,data[no+1].postoperasi);
 			strcpy(data[no].medicalcheckup,data[no+1].medicalcheckup);
+			data[no].bea.obat = data[no+1].bea.obat;
+			data[no].bea.operasi = data[no+1].bea.operasi;
+			data[no].bea.total = data[no+1].bea.total;
 			data[no].wkt.tanggal = data[no+1].wkt.tanggal;
 			data[no].wkt.bulan = data[no+1].wkt.bulan;
 			data[no].wkt.tahun = data[no+1].wkt.tahun;
@@ -255,9 +421,48 @@ int main(){
 			goto awal;
 		}
 	}else if(pilih==5){
+		int pilih_sort;
+		printf("Sorting Berdasarkan:\n1. Tanggal\n2. Nama\nPilih : ");
+		scanf("%i", &pilih_sort);
+		switch (pilih_sort)
+		{
+		case 1:
+			sorting_tanggal();
+			break;
+		case 2:
+			sorting_nama();
+		default:
+			break;
+		}
+		printf("data berhasil diurutkan");
+		getch();
+		system("cls");
+		goto awal;
+	}else if (pilih==6){
+		int pilih_search;
+		printf("Cari Berdasarkan:\n1. Tanggal\n2. Nama\nPilih urutan: ");
+		scanf("%i", &pilih_search);
+		switch (pilih_search)
+		{
+		case 1:
+			searchByTanggal();
+			break;
+		case 2:
+			searchByNama();
+			break;
+		default:
+			break;
+		}
+		getch();
+		system("cls");
+		goto awal;
+	}else if (pilih==7){
 		printf("\nTerima Kasih!");
 	}else{
 		printf("Inputan anda salah.");
+		getch();
+		system("cls");
+		goto awal;
 	}
 	return 0;
 }
