@@ -39,6 +39,12 @@ struct rekam_medis{
 	struct waktu wkt;
 };
 typedef struct rekam_medis remed;
+
+struct user{
+    char username[50];
+    char password[50];
+};
+
  
 remed data[50];
 
@@ -113,12 +119,21 @@ void welcomescreen()
     system("cls"); 
 }
 
-void swap(int *A, int *B) 
-{ 
-	int tmp = *A; 
-	*A = *B; 
-	*B = tmp; 
-} 
+void endscreen(){
+	printf("\n");
+    printf("     ***    ***\n");
+    printf("   ******* *******\n");
+    printf(" ***************\n");
+    printf("  *************\n");
+    printf("   ***********\n");
+    printf("    *********\n");
+    printf("     *******\n");
+    printf("      *****\n");
+    printf("       ***\n");
+    printf("        *\n\n");
+	printf("\n Arroyyan Syahru Romadhoni Roziqi | 1202230005");
+	printf("\n Ardy Ferdinand Christanto Mongdong | 1202230002");
+}
 
 void sorting_tanggal(){
 	int pilih_sorting_tanggal;
@@ -129,19 +144,31 @@ void sorting_tanggal(){
         for (j = 0; j < size - i - 1; j++) {
             if (pilih_sorting_tanggal == 1) { // ascending
                 if (data[j].wkt.tahun > data[j+1].wkt.tahun) {
-                    swap(&data[j], &data[j+1]);
+                    struct rekam_medis temp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = temp;
                 } else if (data[j].wkt.tahun == data[j + 1].wkt.tahun && data[j].wkt.bulan > data[j + 1].wkt.bulan) {
-                    swap(&data[j], &data[j+1]);
+                    struct rekam_medis temp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = temp;
                 } else if (data[j].wkt.tahun == data[j + 1].wkt.tahun && data[j].wkt.bulan == data[j + 1].wkt.bulan && data[j].wkt.tanggal > data[j + 1].wkt.tanggal) {
-                    swap(&data[j], &data[j+1]);
+                    struct rekam_medis temp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = temp;
                 }
             } else if (pilih_sorting_tanggal == 2) { // descending
                 if (data[j].wkt.tahun < data[j+1].wkt.tahun) {
-                    swap(&data[j], &data[j+1]);
+                    struct rekam_medis temp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = temp;
                 } else if (data[j].wkt.tahun == data[j + 1].wkt.tahun && data[j].wkt.bulan < data[j + 1].wkt.bulan) {
-                    swap(&data[j], &data[j+1]);
+                    struct rekam_medis temp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = temp;
                 } else if (data[j].wkt.tahun == data[j + 1].wkt.tahun && data[j].wkt.bulan == data[j + 1].wkt.bulan && data[j].wkt.tanggal < data[j + 1].wkt.tanggal) {
-                    swap(&data[j], &data[j+1]);
+                    struct rekam_medis temp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = temp;
                 }
             }
         }
@@ -150,25 +177,29 @@ void sorting_tanggal(){
     tampil();
 }
 
-void sorting_nama(){
-	int pilih_sorting_nama;
+void sorting_nama() {
+    int pilih_sorting_nama;
     printf("Urutan:\n1. Ascending\n2. Descending\nPilih urutan: ");
     scanf("%i", &pilih_sorting_nama);
-	int i, j;
+    int i, j;
     for (i = 0; i < size - 1; i++) {
         for (j = 0; j < size - i - 1; j++) {
             if (pilih_sorting_nama == 1) { // ascending
-                if (strcmp(data[j].dp.nama, data[j+1].dp.nama) > 0) {
-                    swap(&data[j], &data[j+1]);
+                if (strcmp(data[j].dp.nama, data[j + 1].dp.nama) > 0) {
+                    struct rekam_medis temp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = temp;
                 }
             } else if (pilih_sorting_nama == 2) { // descending
-                if (strcmp(data[j].dp.nama, data[j+1].dp.nama) < 0) {
-                    swap(&data[j], &data[j+1]);
+                if (strcmp(data[j].dp.nama, data[j + 1].dp.nama) < 0) {
+                    struct rekam_medis temp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = temp;
                 }
             }
         }
     }
-	printf("Data setelah diurutkan berdasarkan Tanggal:\n");
+	printf("Data setelah diurutkan berdasarkan Nama:\n");
     tampil();
 }
 
@@ -181,8 +212,8 @@ void searchByTanggal() {
         if (data[i].wkt.tanggal == tanggal && data[i].wkt.bulan == bulan && data[i].wkt.tahun == tahun) {
             found = 1;
             printf("Data ditemukan pada indeks %d\n", i);
-            printf("Kode: %s\n", data[i].dp.kode);
-            printf("Nama: %s\n", data[i].dp.nama);
+            printf("Kode \t\t\t: %s\n", data[i].dp.kode);
+            printf("Nama \t\t\t: %s\n", data[i].dp.nama);
             printf("Pekerjaan \t\t: %s\n",data[i].dp.pekerjaan);
 			printf("No HP \t\t\t: %s\n",data[i].dp.nohp);
 			printf("Umur \t\t\t: %s\n",data[i].dp.umur);
@@ -214,8 +245,8 @@ void searchByNama() {
         if (strcmp(data[i].dp.nama, namaCari) == 0) {
             found = 1;
             printf("Data ditemukan pada indeks %d\n", i);
-            printf("Kode: %s\n", data[i].dp.kode);
-            printf("Nama: %s\n", data[i].dp.nama);
+            printf("Kode\t\t\t: %s\n", data[i].dp.kode);
+            printf("Nama\t\t\t: %s\n", data[i].dp.nama);
             printf("Pekerjaan \t\t: %s\n",data[i].dp.pekerjaan);
 			printf("No HP \t\t\t: %s\n",data[i].dp.nohp);
 			printf("Umur \t\t\t: %s\n",data[i].dp.umur);
@@ -244,9 +275,53 @@ int total(int x, int y){
 	return z;
 }
 
+
+// fungsi untuk melakukan login
+int login(char *username, char *password, char *role) {
+    FILE *file = fopen("D:\\KULIAH 2023\\Semester 1\\Alpro\\PRAKTIKUM IS FUN\\Bismillah-Tubes\\login.csv", "r");
+    if (file == NULL) {
+        printf("Error opening file.\n");
+        exit(1);
+    }
+
+    char line[100];
+    while (fgets(line, sizeof(line), file) != NULL) {
+        char temp_username[50], temp_password[50], temp_role[50];
+        sscanf(line, "%49[^,],%49[^,],%49[^\n]", temp_username, temp_password, temp_role);
+
+        if (strcmp(username, temp_username) == 0 && strcmp(password, temp_password) == 0) {
+            strcpy(role, temp_role);
+            fclose(file);
+            return 1;
+        }
+    }
+
+    fclose(file);
+    return 0;
+}
+
+
 int main(){
 
 	welcomescreen();
+
+    char username[50], password[50], role[50];
+
+	login:
+	printf("Menu Login:\n");
+    printf("Username: ");
+    scanf("%s", username);
+    printf("Password: ");
+    scanf("%s", password);
+
+    if (login(username, password, role)) {
+        printf("Login Sukses!\n");
+		goto awal;
+    } else {
+        printf("Login gagal. Invalid username or password.\n");
+		goto login;
+    }
+
 	size = sizeof(remed)/sizeof(data[0]);
 	int i=1;
 	int pilih=0,pilih_edit;
@@ -299,7 +374,7 @@ int main(){
 		inputedit:
 		scanf("%d",&no);
 		if(no>size){
-			printf("Tidak ada data Pasien nomor ke %d, mohon masukkan nomor kembali : ");
+			printf("Tidak ada data Pasien nomor ke %i, mohon masukkan nomor kembali : ", no);
 			goto inputedit;
 		}else{
 			system("cls");
@@ -315,9 +390,9 @@ int main(){
 			printf("Prosedur Operasi \t: %s\n",data[no].proseduroperasi);	
 			printf("Post Operasi \t\t: %s\n",data[no].postoperasi);	
 			printf("Medical Check Up \t: %s\n",data[no].medicalcheckup);
-			printf("Harga Obat \t\t: %i\n",data[i].bea.obat);	
-			printf("Biaya Operasi \t\t: %i\n",data[i].bea.operasi);	
-			printf("Waktu Input \t\t: %i/%i/%i\n\n", data[i].wkt.tanggal, data[i].wkt.bulan, data[i].wkt.tahun);
+			printf("Harga Obat \t\t: %i\n",data[no].bea.obat);	
+			printf("Biaya Operasi \t\t: %i\n",data[no].bea.operasi);	
+			printf("Waktu Input \t\t: %i/%i/%i\n\n", data[no].wkt.tanggal, data[no].wkt.bulan, data[no].wkt.tahun);
 			printf("\nPilih data yang ingin diedit sesuai nomor (1.Kode;2.Nama;3.Pekerjaan;4.No Hp;5.Umur;6.Penanggung Jawab;7.Diagnosa;8.Anamnesis;9.Prosedur Operasi;10.Post Operasi;11.Medical Check Up;12.Harga Obat;13.Biaya Operasi;14.Waktu Input) = ");
 			scanf("%d",&pilih_edit); 
 			switch (pilih_edit){
@@ -393,28 +468,28 @@ int main(){
 		inputhapus:
 		scanf("%d",&no);
 		if(no>size){
-			printf("Tidak ada data Pasien nomor ke %d, mohon masukkan kembali : ");
+			printf("Tidak ada data Pasien nomor ke %i, mohon masukkan kembali : ", no);
 			goto inputhapus;
 		}else{
 			for(no;no<size;no++){
-			strcpy(data[no].dp.kode,data[no+1].dp.kode);
-			strcpy(data[no].dp.nama,data[no+1].dp.nama);
-			strcpy(data[no].dp.pekerjaan,data[no+1].dp.pekerjaan);
-			strcpy(data[no].dp.nohp,data[no+1].dp.nohp);
-			strcpy(data[no].dp.umur,data[no+1].dp.umur);
-			strcpy(data[no].dp.pj,data[no+1].dp.pj);
-			strcpy(data[no].dp.diagnosa,data[no+1].dp.diagnosa);
-			strcpy(data[no].anamnesis,data[no+1].anamnesis);
-			strcpy(data[no].proseduroperasi,data[no+1].proseduroperasi);
-			strcpy(data[no].postoperasi,data[no+1].postoperasi);
-			strcpy(data[no].medicalcheckup,data[no+1].medicalcheckup);
-			data[no].bea.obat = data[no+1].bea.obat;
-			data[no].bea.operasi = data[no+1].bea.operasi;
-			data[no].bea.total = data[no+1].bea.total;
-			data[no].wkt.tanggal = data[no+1].wkt.tanggal;
-			data[no].wkt.bulan = data[no+1].wkt.bulan;
-			data[no].wkt.tahun = data[no+1].wkt.tahun;
-		}
+				strcpy(data[no].dp.kode,data[no+1].dp.kode);
+				strcpy(data[no].dp.nama,data[no+1].dp.nama);
+				strcpy(data[no].dp.pekerjaan,data[no+1].dp.pekerjaan);
+				strcpy(data[no].dp.nohp,data[no+1].dp.nohp);
+				strcpy(data[no].dp.umur,data[no+1].dp.umur);
+				strcpy(data[no].dp.pj,data[no+1].dp.pj);
+				strcpy(data[no].dp.diagnosa,data[no+1].dp.diagnosa);
+				strcpy(data[no].anamnesis,data[no+1].anamnesis);
+				strcpy(data[no].proseduroperasi,data[no+1].proseduroperasi);
+				strcpy(data[no].postoperasi,data[no+1].postoperasi);
+				strcpy(data[no].medicalcheckup,data[no+1].medicalcheckup);
+				data[no].bea.obat = data[no+1].bea.obat;
+				data[no].bea.operasi = data[no+1].bea.operasi;
+				data[no].bea.total = data[no+1].bea.total;
+				data[no].wkt.tanggal = data[no+1].wkt.tanggal;
+				data[no].wkt.bulan = data[no+1].wkt.bulan;
+				data[no].wkt.tahun = data[no+1].wkt.tahun;
+			}
 			printf("data berhasil dihapus");
 			getch();
 			system("cls");
@@ -457,7 +532,8 @@ int main(){
 		system("cls");
 		goto awal;
 	}else if (pilih==7){
-		printf("\nTerima Kasih!");
+		printf("\nTerima Kasih!\n");
+		endscreen();
 	}else{
 		printf("Inputan anda salah.");
 		getch();
